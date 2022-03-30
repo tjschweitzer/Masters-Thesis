@@ -1,0 +1,58 @@
+% Chapter Template
+
+\chapter{Introduction} % Main chapter title
+
+\label{ChapterX} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Motivation}
+
+Simulation modeling has become an invaluable tool for emulating smoke and heat release from fires. It’s use for training urban and wild-land fire fighters has the capability to be immeasurably useful as it mediates the danger of real fire experience in side of a class room environment. The more unique environments and situations were are able to expose firefighters, the better prepared to deal with a fire in an emergency situation. Current visualization processes like Smokeview or Paraview, can allow the users to change their vantage point and manually filter out what information that may be important. Determining points of interest in a wind field is based on several factors including obstructions, topography, fuel types, ignition points and wind speed and direction. Topography and fuel types are for the most part known factors that have been measured [Reference to landfire and fast fuels]. While wind behavior is dynamic, and changes based on a number of factors if we use Computational Fluid Dynamic (CFD) calulations, we are able to simulate the environment with a fair amount of certainty [FDS Reference and stat?] This allows us to have discrete data in terms of wind vectors, temperature, air density. Visualizing this data in a digestible manner has become a tangible goal with the content improvements with computational hardware and available algorithms. 
+
+
+
+%-----------------------------------
+%	SECTION 2
+%-----------------------------------
+\section{Graphing Techniques}
+
+ Currently there are many unique techniques used for visualizing vector fields in 2-D or 3-D space. These can be sub categorized as a textured-based techniques (Line Integral Convolution), glyph based (Arrow Graphs), or particle tracing(Streamlines). All of these approaches have unique benefits but come with a similar set of drawbacks that our methodology looks to resolve .
+
+Line Integral Convolution (LIC), simulates surface oil patterns in wind tunnel experiments. To do this a texture of white noise is applied to the domain of an area, this can be a flat plane at any orientation or more commonly it is a texture mapped to a 3-D object. Then a 1-Dimensional convolution is applied to the pixels and the resulting intensity of LIC pixels are recorded this provides visualization of strongly correlated streamlines. A large drawback when it comes to LIC is that the texture will occlude any part of the object behind it as well as the small streamlines do not indicate directionality, a line going left to right looks identical to a line going right to left.
+
+Hedgehog or arrow plots,  are visualized my inserting glyphs as each cell of data in  vector field. Glyphs, can be represented by a large array of objects but arrows are primarily used. The orientation of the glyphs can be used to indicate directionality while the objects scale and color can represent other scalier values if desired. these plots  can also be visualised in 2-D or 3-D. 
+
+Particle tracing tends to be a larger sub category as the techniques used change drastically based on a number of factors. If the vector field  has steady state flow (does not change as time progresses) we refer to these as streamlines or a path line if the vector field is time dependent. We also have streak lines where a line is created from all particles that pass though a given point. Placement of these points can be predetermined, random, or placed to form a designated shape like ribbon or a cylinder. To calculate the flow of a particle though an area the use of ordinary differential equations (ODE’s) are used, and ODE with dynamic time stepping like Runge-Kuta 4(5) insures that we have proper sensitivity for a more accurate model then one with a discrete time step like Euler’s. These visualizations can be textured to indicate velocity at a set point along the line, they also  have the same determent as previously discussed with LIC where there is no clear start or end to each line and determining the areas of interest is difficult with out previous knowledge of the vector field.  
+
+With all of these visualization techniques have a tendency to have a large drawback where all information in the field is visualized at once  forcing the user to have to mentally compare the change in between time steps, while having other data being occluded by data closer to the users vantage point. Or requiring the user to have pre-selected where it is assumed that more important information will be. 
+
+
+Our goal is to optimize the way these are visualized as well as calculate points of interest in the simulation and calculate appropriate starting points for the streak lines to intersect these points of interest. For firefighting training points of interest are areas where there is turbulent air flow that can cause unpredictable fire behaviour while inserting pathlines in areas of laminar flow as well.
+
+
+%-----------------------------------
+%	SECTION 3
+%-----------------------------------
+\section{Wind Turbulance}
+
+This is where infomation abouw RE will go  I dont care about it at all right now
+
+%-----------------------------------
+%	SECTION ?
+%-----------------------------------
+\section{Homeless Text}
+can be used to display a large verity of graphs graphs created by {} where the directionality of the vector is indicated by change in the thickness of the line segments and length indicated velocity. This type of graph is still generally used today just without the change in line thickness to indicate  directionality. \cite{567777} The benefits of this are quick views of an area highlighting areas of high and low velocity, while not showing clear start and end points of the streams, additionally for an optimum plot we tend to need to have the orientation and location of the plane beforehand. 
+
+
+
+ 
+
+The final visualization techniques that we group together are different methods for visualizing the movement of 3-Dimensional particles in the field.
+
+
+
+. 
+

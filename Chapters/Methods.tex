@@ -10,19 +10,19 @@
 
 \section{Reynolds Number}
 
-Our first goal is to find a set of points we will refer to as points of interests. To start this we need to calculate the Reynolds-Number (\ensuremath{RE}) \ref{eq:1} of each voxel in every time-step.
-Where we take the product of  \ensuremath{p} as the density of the fluid, \ensuremath{u} is the flow speed of the fluid, and \ensuremath{L} as the characteristic linear dimension, and using $\mu$ as the divisor to get the \ensuremath{RE} for that voxel in that time-step. It should be noted that for constancy in our simulations \ensuremath{L} is calculated by calculating the average length of the sides of each voxel  (\ensuremath{\sqrt[3]{l*w*h}}) changing this value can effect he discrete values but it does not alter the distribution on values. 
+Our first goal is to find a set of points we will refer to as points of interests. To start this we need to calculate the Reynolds-Number (\ensuremath{RE}) \ref{eq:1} of each voxel in every time-step of the simulation.
+We take the product of  \ensuremath{p,u} and \ensuremath{L} where \ensuremath{p} as the density of the fluid, \ensuremath{u} is the flow speed of the fluid, and \ensuremath{L} as the characteristic linear dimension, and then using the dynamic viscosity of fluid represented as $\mu$ as the divisor to get the \ensuremath{RE} for that voxel in that time-step. It should be noted that for constancy in our simulations \ensuremath{L} is calculated by calculating the average length of the sides of each voxel  (\ensuremath{\sqrt[3]{l*w*h}}). Due to this value being a constant in each calculation changing this value can effect the discrete values obtained, but it does not alter the distribution of the values. 
 
 \begin{equation}\label{eq:1}
 RE  = \frac{puL} {\mu} 
 \end{equation}
 
-Now that we have Reynolds Number of each time-step \ensuremath{RE_t} where \ensuremath{t} is the index number referencing a time value.  We find the mean value for each voxel \ref{eq:2} then threshold the data in to two categories \ensuremath{RE>150} as turbulent flow and \ensuremath{0<RE<=40}  as laminar flow, we exclude \ensuremath{RE} values of zero because they indicative of an area that is within an obstruction (e.g. underground, inside of a building). Next we need to compile a list of the index positions for the thresholded data and convert each set of indexes to positions. \color{red} [Better way to state this?] \color{black} 
+Now that we have Reynolds Number of every voxel in each time-step \ensuremath{RE_t} where \ensuremath{t} is an index number referencing a time value.  We find the mean value for each voxel \ref{eq:2} then threshold the data in to two categories; \ensuremath{RE>=150} as turbulent flow and \ensuremath{0<RE<=40}  as laminar flow. We exclude \ensuremath{RE} values of zero because they are indicative of a voxel  that is within an obstruction (e.g. underground, inside of a building). Next we need to compile a list of the index positions for the thresholded data and convert each set of indices to a 3-Dimensional point in space . \color{red} [Better way to state this?] \color{black} 
 \begin{equation} \label{eq:2}
 RE_{mean} = \frac{1}{n} \sum_{i=1}^{n} RE_{i}=\frac{1}{n}\left(RE_{1}+\cdots+RE_{n}\right)
 \end{equation} 
 
- We are then able to run a Clustering algorithm on each category of positions, in this case we use k-means on. This groups all points in to \ensuremath{k} groups while minimizing the distance between a point and that groups centroid. We calculate the value of \ensuremath{k} by taking the \ensuremath{\frac{1}{2}\sqrt[3]{I*J*K}} where \ensuremath{I,J} and \ensuremath{K} are the number of voxels in the x, y and z axis respectively. We then are able to take the centriod from each cluster and and we will refer to these as our points of interest from now on.
+ We then run a clustering algorithm on each category of positions, in this case we use k-means due to its ease of implementation and speed when clustering large sets of points \cite{HDBScan}. This groups all points in to \ensuremath{k} groups while minimizing the distance between a point and that groups centroid. We calculate the value of \ensuremath{k} by taking the \ensuremath{\frac{1}{2}\sqrt[3]{I*J*K}} where \ensuremath{I,J} and \ensuremath{K} are the number of voxels in the x, y and z axis respectively. We then are able to take the centriod from each cluster and and we will refer to these as our points of interest from now on.
 
 \begin{figure}
 \centering

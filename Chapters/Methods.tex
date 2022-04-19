@@ -54,8 +54,17 @@ Now that we have calculated these points of interest we can use an Ordinary Diff
 %-----------------------------------
 \section{Unity Visualization}
 Once we read in all of the data for each point in each pathline into unity, we determine the largest (\ensuremath{RE_{max}}) and smallest (\ensuremath{RE_{min}}) value within the data set.  Now having the minimum and maximum values we are  able to calculate a color value for each segment of the pathlines. To do so we have to calculate the interpolant value within the range [\ensuremath{RE_{min}}, \ensuremath{RE_{max}}] \ref{eq:3}. TThis provides us with a value between [0,1] and then we can map this value to a color on a perceptually uniform color map \color{red} [We use  vega's magma color map with 8 colors] \color{black} For each time step we load in the respective data for all \ensuremath{k} pathlines. To resolve the issue of being able to see orientation but not true directionality of a pathline (a line going left to right looks identical to a line going right to left) we segment each pathline into n-1 line segments  (e.g. \ensuremath{P_0\rightarrow P_1},\ensuremath{P_1 \rightarrow P_2},...,\ensuremath{P_{n-2} \rightarrow P_{n-1}}).
-We then adjust the starting width of each line segment to be the average length of a voxel and the ending width zero. This gives the lines a conical shape to indicate the directionality. We then build a color gradient texture and apply it to the texture from point to point with the precalculated color map. This resolves the issues with un-clear directionality in other visualization methods as previously discussed. We are able to compile and build our Unity system into an executable file that allows for the end user to run on any compatible system. We have the user interface (UI) designed to allow for viewing the simulation using a Head Mounted Display (HMD), a virtual reality headset, and controller or just a computer monitor with a keyboard and mouse for movement. Users just need to  type in the directory of the hdf5 files output discussed previously and the data is cashed for quick loading into the simulation. Then they are able to move around  the environment in either Virtual Reality or just by using the mouse and keyboard. 
+We then adjust the starting width of each line segment to be the average length of a voxel and the ending width zero. Figure \ref{fig:UnityPathline} illustrates the benifits of this visual change. This resolves the issues with un-clear directionality in other visualization methods as previously discussed. We then build a color gradient texture and apply it to the texture from point to point with the precalculated color map. We are able to compile and build our Unity system into an executable file that allows for the end user to run on any compatible system. We have the user interface (UI) designed to allow for viewing the simulation using a Head Mounted Display (HMD), a virtual reality headset, and controller or just a computer monitor with a keyboard and mouse for movement. Users just need to  type in the directory of the hdf5 files output discussed previously and the data is cashed for quick loading into the simulation. Then they are able to move around  the environment in either Virtual Reality or just by using the mouse and keyboard. 
 
 \begin{equation} \label{eq:3}
 f(RE_{min},RE_{max},RE_{value}) = \frac{RE_{value}-RE_{min}}{RE_{max}-RE_{min}}
 \end{equation} 
+
+\begin{figure}
+\centering
+\includegraphics[scale=.3]{Figures/TreePathline1.png}
+\includegraphics[scale=.3]{Figures/TreePathline2.png}
+\decoRule
+\caption[Pathlines comparisons in Unity]{\textbf{Top:} Pathlines visualized as a single line  \textbf{Bottom:} Pathlines broken in to line segments }
+\label{fig:UnityPathline}
+\end{figure}

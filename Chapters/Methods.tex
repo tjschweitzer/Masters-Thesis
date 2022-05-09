@@ -18,7 +18,7 @@ RE  = \frac{puL} {\mu}
 \end{equation}
 
 
-Now we have the reynolds number of every voxel in each time-step \ensuremath{RE_t} where \ensuremath{t} is an index number referencing a time value. Next, we find the mean value for each voxel \ref{eq:2} then threshold the data into two categories; \ensuremath{RE >= 150} as turbulent flow and \ensuremath{0 < RE <= 40} as laminar flow. We chose to take the mean over the median or mode as we don't expect our data to be a skewed distribution; and with reynolds numbers being 32-bit floating point values any repetition is inconsequential. We exclude \ensuremath{RE} values of zero because they are indicative of a voxel that is within an obstruction (e.g. underground, inside of a tree). Next we \ensuremath{RE} threshold our 3-D points in space to locate points of interest.
+Now we have the reynolds number of every voxel in each time-step \ensuremath{RE_t} where \ensuremath{t} is an index number referencing a time value. Next, we find the mean value for each voxel \ref{eq:2} then threshold the data into two categories; \ensuremath{RE >= 150} as turbulent flow and \ensuremath{0 < RE <= 40} as laminar flow. We chose to take the mean over the median or mode as we don't expect our data to have any outliers to the distribution; and with reynolds numbers being 32-bit floating point values any numerical repetition is inconsequential. We exclude \ensuremath{RE} values of zero because they are indicative of a voxel that is within an obstruction (e.g. underground, inside of a tree). Next we \ensuremath{RE} threshold our 3-D points in space to locate points of interest.
 
 
 \begin{equation} \label{eq:2}

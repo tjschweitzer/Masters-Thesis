@@ -1,12 +1,300 @@
 % Appendix A
 
-\chapter{Frequently Asked Questions} % Main appendix title
+\chapter{Software Documentation} % Main appendix title
 
-\label{AppendixA} % For referencing this appendix elsewhere, use \ref{AppendixA}
+\label{Appendix-PreUnity} % For referencing this appendix elsewhere, use \ref{AppendixA}
+\begin{itemize}
+\item \textbf{FDS2PreUnityTool}
+\item[]
+Converts the plot-3D output from Fire Dynamic Simulator (FDS) in to a more optimized data format to be visualized inside of unit. 
+   \begin{itemize}
+        \item \textbf{fds2ComplexGeom.py}
+        \item[] Converts fds input file into a JSON with tree location data and complex terrain information
+        \item \textbf{fdsOutput2Unity.py}
+        \item[] Converts plot3D data from fds into binary data to be loaded into unity
+                    \item[] \textbf{binary File Structure}   
+                \begin{itemize}
+                \item\textbf{Header}
+                \item[] Five 32-bit integers corresponding to the length of each of the five scalar values from the plot-3d output
+                \item\textbf{ 2D array with [x,y,z,q] as quantities, where x, y, and z represent the position while q represents the respective scalar value } 
+                \item[Note:] this is a space matrix version of the output from plot-3D files
+                \end{itemize}
+        \item \textbf{fdsPathLines.py}
+        \item[] Takes plot3D data and calculate the amount of turbulence (represented as Reynolds numbers) to identify regions of interest. Then calculates pathlines that will intersect with points sampled from these regions
+        \item \textbf{main.py}
+        \item[] Creates the p[roper file structure and ensures all functions save data into the proper location  
+   \end{itemize}
+\pagebreak
 
-\section{How do I change the colors of links?}
+\item \textbf{FDS2UnityTool}
+   \begin{itemize}
+        \item \textbf{ConfigData.cs}
+        \item[] Saves all information when transitioning from one scene to another 
 
+        \item \textbf{hrrLoader.cs}
+        \item[] Loads in a color mapped and animated fire particle engine in each voxel per timestep
+        \item \textbf{MainMenu.cs}
+        \item[] Verifies menu check boxes are selected and verifies fire and directory structure for input data
+        \item \textbf{PauseMenu.cs}
+        \item[] Checks pause button input and tracks time in pause menu to allow for accurate timesteps after pausing 
+        \item \textbf{smokeLoader.cs}
+        \item[] Loads in a color mapped and animated smoke particle engine in each voxel per timestep
+        \item \textbf{smvReader.cs}
+        \item[] Loads in and cache's heat release rate and smoke density data additionally tracking current timestep
+        
+        \item \textbf{tduController.cs}
+        \item[] Uses calulations of thermal dosage from Parsons, Russell A., Butler, Bret. W., and Mell, William “Ruddy" to visualize burn injury potential \cite{Parsons2014}
+        \item \textbf{TerrainBuilder.cs}
+        \item[] Loads JSON of terrain data from fds2ComplexGeom.py \ref{PythonComplexGeom} and maps to a 3D mesh with texturing
+        \item \textbf{TreeLoader.cs}
+        \item[] Loads JSON of tree data from  fds2ComplexGeom.py \ref{PythonComplexGeom} and maintains scale regardless of the size of the 3D tree object        
+        \item \textbf{WindStreams.cs}
+        \item[] Loads in and cache's Pathline data from fdsPathLines.py \ref{PythonPathLines} to be visualized each timestep
+        \end{itemize}
+\end{itemize}
+\pagebreak
+
+\section{FDS2UnityVR}
+\subsection{fds2ComplexGeom.py}
+Converts fds input file into a JSON with tree location data and complex terrain information
+\label{PythonComplexGeom}
+\begin{itemize}
+    \item \textbf{Class instantiation}
+    \begin{itemize}    
+    \item Parameters   
+        \begin{itemize}
+        \item\textbf{fds\_input\_location}: complete path to fds input file (.fds)
+        \item \textbf{tree\_id}: name of the tree label
+        \item \textbf{non\_terrain\_obsts}: list of any obstacles that are not classified as terrain.
+        \end{itemize} 
+    \end{itemize}
+    
+    \item \textbf{read\_in\_fds\_obst}
+    \item[] Reads in fds input file and generates a dictionary of dictionary's containing the elevation data for the terrain
+    
+    \item \textbf{read\_in\_tree\_locations}
+    \item[] Reads in all the locations of trees in the fds input file and parses other tree information
+      
+    \item \textbf{read\_in\_fds\_mesh}
+    \item[]  Reads in fds input file and parses the MESH information
+    
+    \item \textbf{complex\_geom}
+    \item[] Takes read in topography information and formats it for a 3D mesh and builds a 3-D mesh
+
+    \begin{itemize}    
+    \item Variables   
+        \begin{itemize}
+        \item\textbf{vertices}: Nx3 numpy array of all vertex points
+        \item \textbf{vert\_counter}: keeps track of current vertex index
+        \item \textbf{faces}: array of all face indexes
+        \item \textbf{face\_counter}: keeps track of current face index (one indexed)
+        \item \textbf{col\_keys}: reverse sorted list of all index points of columns
+        \item \textbf{row\_keys}: reverse sorted list of all index points of current row
+        
+        \end{itemize} 
+    \end{itemize}
+
+    \item \textbf{save\_to\_json}
+    \item[] Saves all parsed data into a JSON file
+                \item[] \textbf{JSON File Structure}   
+                \begin{itemize}
+                \item\textbf{meshData}
+                    \begin{itemize}
+                    \item\textbf{X\_MIN:} x value of the origin point of the mesh 
+                    \item\textbf{Y\_MIN:} y value of the origin point of the mesh 
+                    \item\textbf{Z\_MIN:} z value of the origin point of the mesh 
+                    \item\textbf{X\_MAX:} x value of the opposite corner
+                    \item\textbf{Y\_MAX:} y value of the opposite corner
+                    \item\textbf{Z\_MAX:} z value of the opposite corner
+                    \item\textbf{I:} number of cells in the x direction
+                    \item\textbf{J:} number of cells in the y direction
+                    \item\textbf{K:} number of cells in the z direction
+                    \end{itemize}
+                \item\textbf{verts} 
+                \item[] List of all vertices of the topographical map
+                \item\textbf{faces} 
+                \item[] List of the indexed of vertices to form triangle faces (One indexed values)
+                \item\textbf{treeList}
+                    \begin{itemize}
+                    \item\textbf{x:} x position
+                    \item\textbf{y:} y position
+                    \item\textbf{height:} ground height at position x,y
+                    \item\textbf{crownBaseHeight:} Height from ground level where tree crown begins
+                    \item\textbf{crownRadius:} Radius of tree crown
+                    \item\textbf{crownHeight:} Height of tree crown 
+                    \end{itemize}
+                \end{itemize} 
+    \item \textbf{write\_hdf5}
+    \item[] Saves all parsed data into a HDF5 file 
+    \item[Note:] Reading in the complex geometry as a HDF5 file has not been implemented in to the current Unity project
+                \item[] \textbf{hdf5 File Structure}   
+                \begin{itemize}
+                \item\textbf{meshData} Array of nine, 32-bit floats
+                \item[] [X\_MIN,Y\_MIN, Z\_MIN, X\_MAX, Y\_MAX, Z\_MAX, I, J, K]
+                    \begin{itemize}
+                    \item\textbf{X\_MIN:} x value of the origin point of the mesh 
+                    \item\textbf{Y\_MIN:} y value of the origin point of the mesh 
+                    \item\textbf{Z\_MIN:} z value of the origin point of the mesh 
+                    \item\textbf{X\_MAX:} x value of the opposite corner
+                    \item\textbf{Y\_MAX:} y value of the opposite corner
+                    \item\textbf{Z\_MAX:} z value of the opposite corner
+                    \item\textbf{I:} number of cells in the x direction
+                    \item\textbf{J:} number of cells in the y direction
+                    \item\textbf{K:} number of cells in the z direction
+                    \end{itemize}
+                \item\textbf{verts} 
+                \item[] List of all vertices of the topographical map
+                \item\textbf{faces} 
+                \item[] List of the indexed of vertices to form triangle faces (One indexed values)
+                \item\textbf{treeList} 2D array Size N(umber of trees) by 6
+                \item[] [x,y,height,crownBaseHeight, crownRadius, crownHeight]
+                    \begin{itemize}
+                    \item\textbf{x:} x position
+                    \item\textbf{y:} y position
+                    \item\textbf{height:} ground height at position x,y
+                    \item\textbf{crownBaseHeight:} Height from ground level where tree crown begins
+                    \item\textbf{crownRadius:} Radius of tree crown
+                    \item\textbf{crownHeight:} Height of tree crown 
+                    \end{itemize}
+                \end{itemize} 
+\end{itemize}
+
+\subsection{fdsOutput2Unity.py}
+\label{PythonOutput2Unity}
+Converts plot3D data from fds into hdf5 data to be loaded into unity
+\begin{itemize}
+    \item \textbf{Class instantiation}
+    \begin{itemize}    
+    \item Parameters   
+        \begin{itemize}
+        \item\textbf{fds\_output\_directory}:  Full path to where fds data was output
+        \item\textbf{fds\_input\_location}:  Full path to fds input file
+        \item\textbf{save\_location}: Full path to where data should be saved once processed
+        \item\textbf{save\_type}: Allows for selection for output filetype
+.
+        \end{itemize} 
+    \end{itemize}
+    
+    \item \textbf{read\_in\_fds}
+    \item[] Reads in fds input file to generate list of data being saved as plot3D 
+    
+    \item \textbf{get\_file\_timestep}
+    \item[] Extracts the timestep from the filename
+      
+    \item \textbf{group\_files\_by\_time}
+    \item[]  Groups filenames by timestamp to allow for multi mesh simulations
+    
+    \item \textbf{find\_max\_values\_parallel}
+    \item[] Parallel function to find the max values for each time of plot3D Data
+
+    \item \textbf{get\_values}
+    \item[] Calculates minimum and max values for all types of plot3D Data
+
+
+    \item \textbf{runParallel}
+    \item[] Reads in and saves all plot3D data in parallel.
+
+    \item \textbf{get\_mesh\_number}
+    \item[] Pulls mesh number from filename
+
+    \item \textbf{q\_file\_to\_dict}
+    \item[] Reads in plot3D data and saves it to a dictionary to allow for all threads to access it when running in parallel 
+
+    \item \textbf{write\_to\_json}
+    \item[] Saves all data to JSON format
+        \item[] \textbf{JSON File Structure}   
+                \begin{itemize}
+                \item\textbf{fire:} 2D array, size: N {number of voxels}  by 4
+                \item[] [x, y, z, q] where x, y, and z represent the position while q represents the heat release rate
+                \item\textbf{smoke:} 2D array, size: N {number of voxels}  by 4
+                \item[] [x, y, z, q] where x, y, and z represent the position while q represents the smoke density
+                \item\textbf{configData:}
+                \begin{itemize}
+                    \item\textbf{min:} 
+                \end{itemize} 
+    
+                \end{itemize} 
+    
+
+                "fire": current_fire_array,
+                "smoke": current_density_array,
+                "configData": min_max_dict,
+
+    \item \textbf{write2bin}
+    \item[] Saves all data in a custom binary format
+    \item \textbf{write\_to\_hdf5}
+    \item[] Saves all data in HDF5 format
+
+
+\end{itemize}
+
+
+\subsection{fdsPathLines.py}
+\label{PythonPathLines}
+Takes plot3D data and calculate the amount of turbulence (represented as Reynolds numbers) to identify regions of interest. Then calculates pathlines that will intersect with points sampled from these regions
+\begin{itemize}
+    \item \textbf{Class instantiation}
+    \begin{itemize}    
+    \item Parameters   
+        \begin{itemize}
+        \item\textbf{directory}: location of the fds output files
+        \item\textbf{fds\_input\_location}: location of the fds input file.
+        \end{itemize} 
+ 
+    \end{itemize}   
+    
+    \item \textbf{\_\_check\_valid\_file}
+    \item[] Calculates and saves voxel size
+    
+    \item \textbf{\_\_set\_voxel\_size}
+    \item[] Extracts the timestep from the filename
+      
+    \item \textbf{group\_files\_by\_time}
+    \item[]  Groups filenames by timestamp to allow for multi mesh simulations
+    
+    \item \textbf{find\_max\_values\_parallel}
+    \item[] Parallel function to find the max values for each time of plot3D Data
+
+    \item \textbf{get\_values}
+    \item[] Calculates minimum and max values for all types of plot3D Data
+
+
+    \item \textbf{runParallel}
+    \item[] Reads in and saves all plot3D data in parallel.
+
+    \item \textbf{get\_mesh\_number}
+    \item[] Pulls mesh number from filename
+
+    \item \textbf{q\_file\_to\_dict}
+    \item[] Reads in plot3D data and saves it to a dictionary to allow for all threads to access it when running in parallel 
+
+    \item \textbf{write\_to\_json}
+    \item[] Saves all data to JSON format
+
+    \item \textbf{write2bin}
+    \item[] Saves all data in a custom binary format
+    \item[] \textbf{hdf5 File Structure}   
+                \begin{itemize}
+                \item\textbf{maxValue:} Maximum magnitude of wind represented as a pathline in the current timestep
+                \item\textbf{number\_of\_wind\_streams:} Number of pathlines visualized in the current timestep
+                \item\textbf{length\_of\_wind\_streams:} Array the size of the number of wind streams indicating the number of line segments per pathline
+                \item\textbf{windstream\_\{N\}:} 2D array, size: N {length of current platline}  by 5
+                \item[] [Time, Velocity, x, y, z]
+
+                \end{itemize} 
+    \item \textbf{write\_to\_hdf5}
+    \item[] Saves all data in HDF5 format
+
+
+\end{itemize}
+
+\subsection{main.py}
+\label{PythonMain}
+Creates the p[roper file structure and ensures all functions save data into the proper location  
 The color of links can be changed to your liking using:
+
+
+\section{FDS2UnityVR}
 
 {\small\verb!\hypersetup{urlcolor=red}!}, or
 

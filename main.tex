@@ -77,8 +77,8 @@ parskip, % Uncomment to add space between paragraphs
 
 \subject{Computer Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
 \keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
-\university{\href{http://www.university.com}{University of Montana}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
-\department{\href{http://department.university.com}{Department of Computer Science} }% Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
+\university{\href{http://www.umt.edu}{University of Montana}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
+\department{\href{http://cs.umt.edu}{Department of Computer Science} }% Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
 %\group{\href{http://researchgroup.university.com}{Research Group Name}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
 \faculty{\href{http://faculty.university.com}{Faculty Name}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 
@@ -101,44 +101,75 @@ parskip, % Uncomment to add space between paragraphs
 \begin{titlepage}
 \begin{center}
 
-\vspace*{.06\textheight}
-{\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
-\textsc{\Large Masters Thesis}\\[0.5cm] % Thesis type
+{\LARGE \bfseries \MakeUppercase \ttitle\par}\vspace{0.4cm} % Thesis title
+ % Horizontal line
 
-\HRule \\[0.4cm] % Horizontal line
-{\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
-\HRule \\[1.5cm] % Horizontal line
- 
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushleft} \large
-\emph{Author:}\\
+\emph{By:}\\
 {\authorname} % Author name - remove the \href bracket to remove the link
 \end{flushleft}
 \end{minipage}
-% \begin{minipage}[t]{0.4\textwidth}
-% \begin{flushright} \large
-% \emph{Supervisor:} \\
-% \href{http://www.jamessmith.com}{\supname} % Supervisor name - remove the \href bracket to remove the link  
-% \end{flushright}
-% \end{minipage}\\[3cm]
- 
+
 \vfill
 
-\large \textit{A thesis submitted in fulfillment of the requirements\\ for the degree of \degreename}\\[0.3cm] % University requirement text
-\textit{in the}\\[0.4cm]
-\deptname\\[2cm] % Research group name and department name
- 
+\textit{Bachelor of Science - Health \& Human Performance, University of Montana, Missoula, MT, 2015}\\ % University requirement text
+\textit{Associates of Applied Science - Photographic Communications, Northwest College, Powell, WY, 2009}\\ % University requirement text
 \vfill
 
-{\large \today}\\[4cm] % Date
-%\includegraphics{Logo} % University/department logo - uncomment to place it
- 
+
+\vfill
+
+\textit{Master of Science in Computer Science}
+\vfill
+
+
+
+
+\vfill
+{\Large\textit{University of Montana}
+
+\textit{Missoula, MT}
+
+\textit{May, 2022}}
+\vfill
+
+\textit{Approved by:}
+
+
+\textit{Scott Whittenburg, Dean of The Graduate School}
+
+
+\textit{Graduate School}
+\vfill
+
+\textit{Jesse Johnson, Chair}
+
+\textit{Computer Science}
+\vfill
+\textit{Yolanda Reimer}
+
+\textit{Computer Science}
+
+\vfill
+\textit{Russell Parsons}
+
+\textit{Forest Service}
+\vfill
+
+
+
+
+\vfill
+
 \vfill
 \end{center}
 \end{titlepage}
 
 
 
+\usepackage{afterpage}
+\newpage
 
 
 %----------------------------------------------------------------------------------------
@@ -147,7 +178,7 @@ parskip, % Uncomment to add space between paragraphs
 
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-Effective visualization of unsteady, time-dependent vector fields in a virtual environment is not a trivial task. This is due to the fact that most visualization techniques require the user to have a preemptive understanding of how the wind will behave before the simulation can be visualized. In this paper we will take air data flow from computational fluid dynamic simulations to calculate turbulence (represented as reynolds numbers) to designate points of interest. We will then calculate wind pathlines that will intersect with these points. We address the issue of optimizing the appropriate number of pathlines relative to the size and resolution of the simulation. We are then able to implement the ability to interact with the simulations using a modern video game engine with virtual reality capabilities.
+Effective visualization of unsteady, time-dependent vector fields in a virtual environment is not a trivial task. This is due to the fact that most visualization techniques require the user to have a prior understanding of how the vector field will behave to set the parameters used to create the visualization. In this thesis we will take air flow data from a computational fluid dynamic simulations to calculate the amount of turbulence (represented as Reynolds numbers) to identify regions of interest. We then calculate wind pathlines that will intersect with these points sampled from these regions. We address the issue of optimizing the appropriate number of pathlines relative to the size and resolution of the simulation. We are then able to implement the ability to interact with the simulations using a modern video game engine with virtual reality capabilities. By comparing the results with results that do not involve the turbulence based sampling methods, we conclude that our method provides more detail where detail is demanded.
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -246,7 +277,7 @@ $\mu$ & dynamic viscosity of fluid & \si{\kilogram\per(\meter\second})\\
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
 
-%\include{Appendices/AppendixA}
+\include{Appendices/AppendixA}
 %\include{Appendices/AppendixB}
 %\include{Appendices/AppendixC}
 
